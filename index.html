@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .background {
+            background: url('https://images.pexels.com/photos/957024/forest-trees-perspective-bright-957024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center fixed;
+            background-size: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .main-content {
+            margin-top: 56px;
+            padding: 2rem;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .card-title {
+            color: #007bff;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .card-text {
+            color: #666;
+        }
+        .btn-custom {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .btn-custom:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <!-- Menu de Navegação -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">APOLLO</a>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <div class="container">
+            <h1 class="text-center mb-4"> </h1>
+            <div class="row">
+                <!-- Bloco de Notas -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Anotações </h2>
+                            <p class="card-text">Gerencie suas anotações de forma simples e eficiente.</p>
+                            <a href="bloco-de-notas/index.html" class="btn btn-custom">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LINO APOLLO 2025 -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Cortes</h2>
+                            <p class="card-text">Gerencie produtos e cortes com facilidade.</p>
+                            <a href="cortes/index.html" class="btn btn-custom">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registro de Facas -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Medidas das Facas</h2>
+                            <p class="card-text">Registre e acompanhe as medições das facas.</p>
+                            <a href="faca/index.html" class="btn btn-custom">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download dos Arquivos Gerais -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Download dos Arquivos</h2>
+                            <p class="card-text">Exporte e importe todos os dados.</p>
+                            <button class="btn btn-custom" onclick="exportAllData()">Exportar Tudo</button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                            <button class="btn btn-custom mt-2" onclick="document.getElementById('importFile').click()">Importar Tudo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para exportar todos os dados
+        function exportAllData() {
+            const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+            const products = JSON.parse(localStorage.getItem('products') || '[]');
+            const facaRegistros = JSON.parse(localStorage.getItem('facaRegistros') || '[]');
+
+            const data = {
+                notes,
+                products,
+                facaRegistros
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dados_gerais_exportados.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Função para importar todos os dados
+        document.getElementById('importFile').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem('notes', JSON.stringify(data.notes || []));
+                    localStorage.setItem('products', JSON.stringify(data.products || []));
+                    localStorage.setItem('facaRegistros', JSON.stringify(data.facaRegistros || []));
+
+                    // Atualiza as páginas sem recarregar
+                    updatePages();
+                    alert('Dados importados com sucesso!');
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Função para atualizar as páginas sem recarregar
+        function updatePages() {
+            // Atualiza a página de anotações
+            if (window.notesPage && window.notesPage.loadNotesFromLocalStorage) {
+                window.notesPage.loadNotesFromLocalStorage();
+            }
+
+            // Atualiza a página de produtos
+            if (window.productsPage && window.productsPage.loadProductsFromLocalStorage) {
+                window.productsPage.loadProductsFromLocalStorage();
+            }
+
+            // Atualiza a página de facas
+            if (window.facaPage && window.facaPage.loadFacaRegistrosFromLocalStorage) {
+                window.facaPage.loadFacaRegistrosFromLocalStorage();
+            }
+        }
+    </script>
+</body>
+</html>
